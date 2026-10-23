@@ -1,0 +1,356 @@
+/* ============================================================
+   Explore Anuradhapura — Django admin theme
+   Django 6 styles the admin through CSS variables, so most of
+   the work here is redefining :root. The rest is polish.
+   ============================================================ */
+
+:root {
+    --primary: #af5a2e;
+    --secondary: #7c3f1d;
+    --accent: #f6ecdc;
+    --primary-fg: #ffffff;
+
+    --body-fg: #44403c;
+    --body-bg: #faf7f2;
+    --body-quiet-color: #78716c;
+    --body-medium-color: #57534e;
+    --body-loud-color: #1c1917;
+
+    --header-color: #78716c;
+    --header-branding-color: #af5a2e;
+    --header-bg: #ffffff;
+    --header-link-color: #44403c;
+
+    --breadcrumbs-fg: #78716c;
+    --breadcrumbs-link-fg: #af5a2e;
+    --breadcrumbs-bg: #f6ecdc;
+
+    --link-fg: #af5a2e;
+    --link-hover-color: #7c3f1d;
+    --link-selected-fg: #7c3f1d;
+
+    --hairline-color: #e7e5e4;
+    --border-color: #d6d3d1;
+
+    --error-fg: #b91c1c;
+
+    --message-info-bg: #fdf0e6;
+    --message-success-bg: #ecfccb;
+    --message-warning-bg: #fef9c3;
+    --message-error-bg: #fee2e2;
+
+    --darkened-bg: #f2ece3;
+    --selected-bg: #f6ecdc;
+    --selected-row: #fdf6ec;
+
+    --button-fg: #ffffff;
+    --button-bg: #af5a2e;
+    --button-hover-bg: #7c3f1d;
+    --default-button-bg: #af5a2e;
+    --default-button-hover-bg: #7c3f1d;
+    --close-button-bg: #78716c;
+    --close-button-hover-bg: #57534e;
+    --delete-button-bg: #b91c1c;
+    --delete-button-hover-bg: #991b1b;
+
+    --object-tools-fg: #ffffff;
+    --object-tools-bg: #af5a2e;
+    --object-tools-hover-bg: #7c3f1d;
+
+    --font-family-primary: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+
+/* ---------- dark theme ---------- */
+
+html[data-theme="dark"] {
+    --primary: #d97b4f;
+    --secondary: #5f2f14;
+    --accent: #f6ecdc;
+    --primary-fg: #ffffff;
+
+    --body-fg: #e7e5e4;
+    --body-bg: #1c1917;
+    --body-quiet-color: #a8a29e;
+    --body-medium-color: #d6d3d1;
+    --body-loud-color: #fafaf9;
+
+    --header-color: #a8a29e;
+    --header-branding-color: #d97b4f;
+    --header-bg: #292524;
+    --header-link-color: #e7e5e4;
+
+    --breadcrumbs-fg: #a8a29e;
+    --breadcrumbs-link-fg: #e8a579;
+    --breadcrumbs-bg: #1c1917;
+
+    --link-fg: #e8a579;
+    --link-hover-color: #f2c4a6;
+    --link-selected-fg: #e8a579;
+
+    --hairline-color: #292524;
+    --border-color: #44403c;
+
+    --selected-bg: #3d2a1c;
+    --selected-row: #2c2118;
+
+    --button-bg: #af5a2e;
+    --button-hover-bg: #7c3f1d;
+    --default-button-bg: #af5a2e;
+    --default-button-hover-bg: #7c3f1d;
+    --object-tools-bg: #af5a2e;
+    --object-tools-hover-bg: #7c3f1d;
+}
+
+
+/* ============================================================
+   Header branding
+   ============================================================ */
+
+#header {
+    border-bottom: 3px solid #af5a2e;
+}
+
+#branding {
+    display: flex;
+    align-items: center;
+}
+
+#site-name a {
+    display: flex;
+    align-items: center;
+    line-height: 0;
+}
+
+.ea-admin-logo {
+    height: 34px;
+    width: auto;
+    display: block;
+    border-radius: 6px;
+}
+
+
+/* ============================================================
+   Typography
+   ============================================================ */
+
+#content h1,
+#content h2,
+#content h3 {
+    font-family: ui-serif, Georgia, Cambria, "Times New Roman", serif;
+    letter-spacing: -0.01em;
+}
+
+#content {
+    padding-bottom: 60px;
+}
+
+
+/* ============================================================
+   Buttons
+   ============================================================ */
+
+.button,
+input[type="submit"],
+input[type="button"],
+.submit-row input {
+    border-radius: 8px;
+    font-weight: 600;
+    padding: 8px 16px;
+    transition: background-color 0.15s ease;
+    box-shadow: none;
+}
+
+a.button {
+    border-radius: 8px;
+}
+
+.object-tools a {
+    border-radius: 8px;
+    font-weight: 600;
+}
+
+
+/* ============================================================
+   Change list table
+   ============================================================ */
+
+#result_list {
+    border-collapse: separate;
+    border-spacing: 0;
+    border: 1px solid var(--hairline-color);
+    border-radius: 10px;
+    overflow: hidden;
+    background: var(--body-bg);
+}
+
+#result_list th {
+    background: var(--darkened-bg);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: var(--body-medium-color);
+    padding: 11px 12px;
+    border-bottom: 1px solid var(--hairline-color);
+}
+
+#result_list td {
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--hairline-color);
+    line-height: 1.5;
+}
+
+#result_list tr:last-child td {
+    border-bottom: none;
+}
+
+#result_list tbody tr:hover {
+    background: var(--selected-bg);
+}
+
+#result_list a {
+    font-weight: 600;
+}
+
+
+/* ---------- rating pill in the list ---------- */
+
+.ea-rating {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: var(--accent);
+    color: #a2431c;
+    font-weight: 700;
+    padding: 2px 9px;
+    border-radius: 999px;
+    font-size: 12px;
+}
+
+html[data-theme="dark"] .ea-rating {
+    color: #f6ecdc;
+}
+
+
+/* ============================================================
+   Filters + search
+   ============================================================ */
+
+#changelist-filter {
+    border-left: 1px solid var(--hairline-color);
+    background: var(--darkened-bg);
+    border-radius: 10px;
+    margin-left: 16px;
+}
+
+#changelist-filter h2 {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: var(--body-medium-color);
+}
+
+#changelist-filter li a {
+    border-radius: 6px;
+    padding: 4px 8px;
+}
+
+#changelist-filter li.selected a {
+    background: var(--accent);
+    font-weight: 600;
+}
+
+#changelist-search {
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 7px 10px;
+    background: var(--body-bg);
+    color: var(--body-fg);
+}
+
+#changelist-search:focus {
+    outline: 2px solid var(--primary);
+    outline-offset: -1px;
+}
+
+
+/* ============================================================
+   Paginator + module boxes
+   ============================================================ */
+
+.paginator {
+    border-radius: 8px;
+    background: var(--darkened-bg);
+}
+
+.module {
+    border-radius: 10px;
+    border: 1px solid var(--hairline-color);
+}
+
+.submit-row {
+    border-radius: 10px;
+}
+
+
+/* ============================================================
+   Forms (add / edit page)
+   ============================================================ */
+
+.form-row {
+    margin-bottom: 14px;
+}
+
+input[type="text"],
+input[type="number"],
+input[type="url"],
+textarea,
+select {
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    padding: 7px 10px;
+    background: var(--body-bg);
+    color: var(--body-fg);
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+    outline: 2px solid var(--primary);
+    outline-offset: -1px;
+    border-color: var(--primary);
+}
+
+fieldset {
+    border: 1px solid var(--hairline-color);
+    border-radius: 10px;
+    padding: 18px;
+    margin-bottom: 20px;
+    background: var(--body-bg);
+}
+
+fieldset .module {
+    border: none;
+    padding: 0;
+}
+
+h2 {
+    letter-spacing: 0;
+}
+
+
+/* ============================================================
+   Messages (the green "saved" bar)
+   ============================================================ */
+
+.messagelist {
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.messagelist li {
+    border-radius: 8px;
+    padding: 10px 14px;
+    margin-bottom: 8px;
+    font-weight: 500;
+}

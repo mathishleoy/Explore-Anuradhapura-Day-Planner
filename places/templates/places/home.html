@@ -1,0 +1,200 @@
+{% extends 'places/base.html' %}
+
+{% load static %}
+
+{% block title %}Places to visit{% endblock %}
+
+{% block content %}
+
+    <!-- ===== HERO ===== -->
+    <section class="relative py-24 sm:py-32 overflow-hidden">
+    <img src="{% static 'places/images/hero.jpg' %}" alt="Sunrise over the Ruwanwelisaya stupa and ancient stone pillars in Anuradhapura" width="1920" height="1088" class="absolute inset-0 size-full object-cover">
+    <div class="absolute inset-0 bg-black/40"></div>
+    <div class="relative z-10 mx-auto max-w-6xl px-4">
+        <span class="inline-block rounded-full bg-white/20 border border-white/30 px-3 py-1.5 text-xs font-medium tracking-[0.2em] text-white uppercase backdrop-blur-sm">
+            UNESCO World Heritage &middot; Sri Lanka
+        </span>
+        <h1 class="mt-4 max-w-2xl font-serif text-4xl leading-tight text-white sm:text-6xl">
+            One day in the sacred city of Anuradhapura
+        </h1>
+        <p class="mt-4 text-lg text-stone-200 max-w-2xl">
+            Essential stops, plotted on a map, with visiting times and travel estimates so you can build a realistic single-day route.
+        </p>
+
+        <div class="mt-8 flex gap-3 justify-start">
+            <a href="/map" class="bg-terracotta-700 text-white px-6 py-3 rounded-lg font-medium hover:bg-terracotta-800 transition">
+                <i data-lucide="map-pin" class="w-4 h-4 inline-block mr-1 -mt-0.5"></i>Open the map
+            </a>
+            <a href="/my-day" class="text-terracotta-600 bg-white hover:bg-transparent hover:text-white hover:border hover:border-white px-6 py-3 rounded-lg font-medium transition">
+                <i data-lucide="route" class="w-4 h-4 inline-block mr-1 -mt-0.5"></i>My day
+            </a>
+        </div>
+
+    </div>
+
+    </section>
+    <!-- ===== HERO END ===== -->
+
+    <!-- ===== SECTION HEAD & FILTERS ===== -->
+    <section id="places" class="mx-auto max-w-6xl px-4 pt-12 lg:scroll-mt-10">
+        <div class="flex items-start justify-between mb-8 gap-4">
+            <div>
+                <h2 class="text-2xl font-serif font-semibold text-stone-900">Places to visit</h2>
+                <span class="text-sm text-stone-500" id="places-count">{{ places|length }} places shown</span>
+            </div>
+            <div class="flex gap-3 flex-wrap items-center">
+                <input type="search" id="filter-search" placeholder="Search places&hellip;" aria-label="Search places by name"
+                    class="text-sm text-stone-700 bg-white border border-stone-300 rounded-lg px-3 py-2 w-full sm:w-56 focus:outline-none focus:ring-2 focus:ring-terracotta-500">
+                <select name="category" id="filter-category" class="text-sm text-stone-700 bg-white border border-stone-300 rounded-lg px-3 py-2 pr-8 appearance-none bg-no-repeat bg-right cursor-pointer focus:outline-none focus:ring-2 focus:ring-terracotta-500" style="background-image: url(&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2378716c' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E&quot;); background-position: right 0.75rem center;">
+                    <option value="">All categories</option>
+                    <option value="stupa">Stupa</option>
+                    <option value="temple">Temple</option>
+                    <option value="monument">Monument</option>
+                    <option value="heritage_site">Heritage Site</option>
+                    <option value="sculpture">Sculpture</option>
+                    <option value="museum">Museum</option>
+                    <option value="ruins">Ruins</option>
+                    <option value="sacred_site">Sacred Site</option>
+                    <option value="lake">Lake</option>
+                    <option value="cafe">Cafe</option>
+                    <option value="restaurant">Restaurant</option>
+                </select>
+                <select name="rating" id="filter-rating" class="text-sm text-stone-700 bg-white border border-stone-300 rounded-lg px-3 py-2 pr-8 appearance-none bg-no-repeat bg-right cursor-pointer focus:outline-none focus:ring-2 focus:ring-terracotta-500" style="background-image: url(&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2378716c' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E&quot;); background-position: right 0.75rem center;">
+                    <option value="">Any rating</option>
+                    <option value="4.5">4.5+</option>
+                    <option value="4.0">4.0+</option>
+                    <option value="3.5">3.5+</option>
+                </select>
+                <select name="order" id="filter-order" class="text-sm text-stone-700 bg-white border border-stone-300 rounded-lg px-3 py-2 pr-8 appearance-none bg-no-repeat bg-right cursor-pointer focus:outline-none focus:ring-2 focus:ring-terracotta-500" style="background-image: url(&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2378716c' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E&quot;); background-position: right 0.75rem center;">
+                    <option value="">Curated order</option>
+                    <option value="highest">Highest rated</option>
+                    <option value="name">Name A-Z</option>
+                    <option value="visit">Shortest visit</option>
+                    <option value="-visit">Longest visit</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- ===== PLACE CARDS GRID ===== -->
+        <div id="places-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Cards rendered by Django on load, then rebuilt by JS on filter change -->
+            {% for place in places %}
+            <article class="bg-white rounded-xl border border-stone-200 shadow-sm hover:shadow-md transition-shadow overflow-hidden flex flex-col">
+                {% if place.image_url %}
+                    <img src="{{ place.image_url }}" alt="{{ place.name }}" class="w-full h-48 object-cover">
+                {% else %}
+                    <div class="w-full h-48 bg-sand flex items-center justify-center">
+                        <span class="text-stone-600 font-medium">{{ place.name }}</span>
+                    </div>
+                {% endif %}
+                <div class="p-4 flex flex-col gap-3">
+                    <div class="flex items-start justify-between gap-2">
+                        <div class="flex flex-col gap-1.5 min-w-0">
+                            <span class="self-start text-xs font-semibold uppercase tracking-wide text-terracotta-600 bg-terracotta-50 px-2 py-1 rounded-full whitespace-nowrap">
+                                {{ place.display_categories }}
+                            </span>
+                            <h3 class="text-lg font-serif font-semibold text-stone-900">{{ place.name }}</h3>
+                        </div>
+                        <p class="text-sm font-medium text-terracotta-600 flex items-center gap-1 shrink-0">
+                            <i data-lucide="star" class="w-4 h-4 fill-terracotta-500 text-terracotta-500"></i>{{ place.rating }}
+                        </p>
+                    </div>
+                    <p class="text-sm text-stone-600 leading-relaxed">{{ place.short_description }}</p>
+                    <p class="text-xs text-stone-500 flex items-center gap-1">
+                        <i data-lucide="clock" class="w-3.5 h-3.5"></i>
+                        {{ place.opening_hours }} &middot; about {{ place.typical_visit }}m on site
+                    </p>
+                    <p class="text-xs text-stone-500 flex items-center gap-1">
+                        <i data-lucide="ticket" class="w-3.5 h-3.5"></i>
+                        {{ place.entry_fee }}
+                    </p>
+                    <div class="mt-auto pt-2 flex gap-2">
+                        <a class="flex-1 text-center text-sm font-medium text-stone-700 border border-stone-300 rounded-lg px-3 py-2 hover:bg-stone-50 transition" href="/place/{{ place.slug }}/">Details</a>
+                        <button data-add-btn="{{ place.id }}" onclick="addToPlan({{ place.id }})" class="flex-1 text-sm font-medium text-white bg-terracotta-700 rounded-lg px-3 py-2 hover:bg-terracotta-800 transition">Add</button>
+                    </div>
+                </div>
+            </article>
+            {% endfor %}
+        </div>
+    </section>
+
+    <!-- ===== FILTER LOGIC (AJAX) ===== -->
+    <script>
+        const searchInput = document.getElementById('filter-search');
+        const categorySelect = document.getElementById('filter-category');
+        const ratingSelect = document.getElementById('filter-rating');
+        const orderSelect = document.getElementById('filter-order');
+        const grid = document.getElementById('places-grid');
+        const count = document.getElementById('places-count');
+
+        function loadPlaces() {
+            const params = new URLSearchParams();
+            if (searchInput.value.trim()) params.set('q', searchInput.value.trim());
+            if (categorySelect.value) params.set('category', categorySelect.value);
+            if (ratingSelect.value) params.set('rating', ratingSelect.value);
+            if (orderSelect.value) params.set('order', orderSelect.value);
+
+            fetch('/api/places/?' + params.toString())
+                .then(response => response.json())
+                .then(places => {
+                    if (places.length === 0) {
+                        grid.innerHTML = '<p class="text-stone-500 text-center py-12 col-span-full">No places match your filters.</p>';
+                        count.textContent = '0 places shown';
+                        return;
+                    }
+
+                    count.textContent = places.length + ' places shown';
+                    grid.innerHTML = places.map(place => {
+                        const image = place.image_url
+                            ? `<img src="${place.image_url}" alt="${escapeHtml(place.name)}" class="w-full h-48 object-cover">`
+                            : `<div class="w-full h-48 bg-sand flex items-center justify-center"><span class="text-stone-600 font-medium">${escapeHtml(place.name)}</span></div>`;
+
+                        return `
+                        <article class="bg-white rounded-xl border border-stone-200 shadow-sm hover:shadow-md transition-shadow overflow-hidden flex flex-col">
+                            ${image}
+                            <div class="p-4 flex flex-col gap-3">
+                                <div class="flex items-start justify-between gap-2">
+                                    <div class="flex flex-col gap-1.5 min-w-0">
+                                        <span class="self-start text-xs font-semibold uppercase tracking-wide text-terracotta-600 bg-terracotta-50 px-2 py-1 rounded-full whitespace-nowrap">${escapeHtml(place.categories)}</span>
+                                        <h3 class="text-lg font-serif font-semibold text-stone-900">${escapeHtml(place.name)}</h3>
+                                    </div>
+                                    <p class="text-sm font-medium text-terracotta-600 flex items-center gap-1 shrink-0">
+                                        <i data-lucide="star" class="w-4 h-4 fill-terracotta-500 text-terracotta-500"></i>${place.rating}
+                                    </p>
+                                </div>
+                                <p class="text-sm text-stone-600 leading-relaxed">${escapeHtml(place.short_description)}</p>
+                                <p class="text-xs text-stone-500 flex items-center gap-1">
+                                    <i data-lucide="clock" class="w-3.5 h-3.5"></i>
+                                    ${escapeHtml(place.opening_hours)} &middot; about ${place.typical_visit}m on site
+                                </p>
+                                <p class="text-xs text-stone-500 flex items-center gap-1">
+                                    <i data-lucide="ticket" class="w-3.5 h-3.5"></i>
+                                    ${escapeHtml(place.entry_fee)}
+                                </p>
+                                <div class="mt-auto pt-2 flex gap-2">
+                                    <a class="flex-1 text-center text-sm font-medium text-stone-700 border border-stone-300 rounded-lg px-3 py-2 hover:bg-stone-50 transition" href="/place/${place.slug}/">Details</a>
+                                    <button data-add-btn="${place.id}" onclick="addToPlan(${place.id})" class="flex-1 text-sm font-medium text-white bg-terracotta-700 rounded-lg px-3 py-2 hover:bg-terracotta-800 transition">Add</button>
+                                </div>
+                            </div>
+                        </article>`;
+                    }).join('');
+                    lucide.createIcons();
+                    updateAddButtons();
+                });
+        }
+
+        // Prevents HTML injection from place names/descriptions
+        function escapeHtml(text) {
+            if (!text) return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        searchInput.addEventListener('input', loadPlaces);
+        categorySelect.addEventListener('change', loadPlaces);
+        ratingSelect.addEventListener('change', loadPlaces);
+        orderSelect.addEventListener('change', loadPlaces);
+    </script>
+
+{% endblock %}
